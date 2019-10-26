@@ -6,7 +6,7 @@
 /*   By: damerica <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/26 14:35:49 by damerica          #+#    #+#             */
-/*   Updated: 2019/10/13 21:55:53 by damerica         ###   ########.fr       */
+/*   Updated: 2019/10/22 19:43:26 by damerica         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ int	ft_check(int ret, char **argv, const int fd, char **line)
 
 int	get_next_line(const int fd, char **line)
 {
-	static char	*argv[255];
+	static char	*argv[10240];
 	char		*s;
 	int			ret;
 	char		buf[BUFF_SIZE + 1];
 
-	if (line == NULL || fd < 0)
+	if (line == NULL || fd < 0 || fd > 10240)
 		return (-1);
 	if (argv[fd] && ft_strchr(argv[fd], '\n'))
 		return (ft_get_next(fd, argv, line));
