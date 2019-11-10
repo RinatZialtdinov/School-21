@@ -13,8 +13,14 @@
 typedef struct s_tetris
 {
 	char **pos;
-	int x;
-	int y;
+	int max_x;
+	int max_y;
 	struct s_tetris *next;
 	struct s_tetris *head;
 }				t_tetris;
+
+typedef struct	s_cord
+{
+	int x;
+	int y;
+}				t_cord;
