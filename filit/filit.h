@@ -21,6 +21,8 @@ typedef struct s_tetris
 
 typedef struct	s_cord
 {
-	int x;
-	int y;
+	int trm_x;
+	int trm_y;
+	int map_x;
+	int map_y;
 }				t_cord;
