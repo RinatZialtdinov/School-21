@@ -334,12 +334,12 @@ t_tetris	*write_in_list(char *buf, t_tetris **trm)
 		}
 		//printf("|%i|\n", i1);
 	}
-	printf("x = %i   y = %i\n", (*trm)->max_x, (*trm)->max_y);
+	printf("trm_x = %i   trm_y = %i\n", (*trm)->max_x, (*trm)->max_y);
 	//trm = trm->head;
 	//while ((*trm))
 	//{
-		for (int u = 0; u < (*trm)->max_y; u++)
-			printf("%s\n", (*trm)->pos[u]);
+		//for (int u = 0; u < (*trm)->max_y; u++)
+		//	printf("%s\n", (*trm)->pos[u]);
 		//(*trm) = (*trm)->next;	
 	//}
 	/*printf("%s\n", (*trm)->pos[0]);
@@ -645,6 +645,9 @@ int put_tetrimo(char **map, t_tetris *trm)
 	char set;
 	printf("put_tetrimo 0\n");
 	printf("Size -> %i\n", size);
+	printf("trm->max_y -  %i\n", trm->max_y);
+	for (int u = 0; u < trm->max_y; u++)
+		printf("^%s^\n", trm->pos[u]);
 	set = 'A';
 	if ((size = check_put_tetrimo(map, trm, set)) != 0)
 	{
