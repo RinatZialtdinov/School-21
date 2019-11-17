@@ -351,69 +351,6 @@ t_tetris	*write_in_list(char *buf, t_tetris **trm)
 	return((*trm)->next);
 }
 
-/*int improve_length(char *buf)
-{
-	int i;
-	int count;
-	int result;
-
-	result = 4;
-	count = 0;
-	i = 0;
-	while (i < 21)
-	{
-		while (buf[i] != '\n')
-		{
-			if (buf[i] == '.')
-			{
-				count++;
-			}
-			i++;
-		}
-		if (count == 4)
-		{
-			result--;
-		}
-		count = 0;
-		i++;
-	}
-	printf("improve_lenght = %i\n", result);
-	//while (getchar()!='\n');
-	return (result);
-}
-
-int improve_width(char *buf)
-{
-	int i;
-	int count;
-	int result;
-	printf("improve_width 0\n");
-	result = 4;
-	count = 0;
-	i = 0;
-	while (i != 4)
-	{
-		while (i <= 19)
-		{
-			if (buf[i] == '.')
-			{
-				count++;
-			}
-			i = i + 5;
-		}
-		if (count == 4)
-		{
-			result --;
-		}
-		count = 0;
-		i = i - 19;
-	}
-	printf("improve_width 1\n");
-	if (result == 0)
-		return (0);
-	return (result + 1);
-}*/
-
 t_tetris *create_list(char *buf, t_tetris **trm)
 {
 	int j;
@@ -645,7 +582,7 @@ int put_tetrimo(char **map, t_tetris *trm)
 	char set;
 	printf("put_tetrimo 0\n");
 	printf("Size -> %i\n", size);
-	printf("trm->max_y -  %i\n", trm->max_y);
+	//printf("trm->max_y -  %i\n", trm->max_y);
 	for (int u = 0; u < trm->max_y; u++)
 		printf("^%s^\n", trm->pos[u]);
 	set = 'A';
@@ -663,6 +600,7 @@ int put_tetrimo(char **map, t_tetris *trm)
 	//write_tetrimo_in_map(map, trm, set);
 	if (trm->next != NULL)
 	{
+		set++;
 		printf("_________________________________________________\n");
 		put_tetrimo(map, trm->next);
 	}
@@ -732,154 +670,3 @@ int     main(int ac, char **av)
 	c = put_tetrimo(write_dots(create_map(2), 2), trm);
     return (0);
 }
-/*
-char **create_map(int size)
-{
-	char **map;
-	int i;
-
-	i = 0;
-	map = (char**)malloc(sizeof(char*)* (size + 1));
-	while (i <= size)
-	{
-		map[i] = (char*)malloc(sizeof(char) * (size + 1));
-		i++;
-	}
-	return (map);
-}
-
-char **write_dots(char **map, int size)
-{
-	int i;
-	int j;
-
-	j = 0;
-	while (j <= size)
-	{
-		i = 0;
-		while (i != size)
-		{
-			map[j][i] = '.';
-			i++;
-		}
-		map[j][i] = '\0';
-		j++;
-	}
-	map[j][0] = '\0';
-	return (map);
-}
-
-void del_all_pos(char ***map, char set)
-{
-	int i;
-	int j;
-
-	j = 0;
-	while ((*map)[j][0] != '\0')
-	{
-		i = 0;
-		while ((*map)[j][i] != '\0')
-		{
-			if ((*map)[j][i] == set)
-			{
-				(*map)[j][i] = '.';
-			}
-		}
-		j++;
-	}
-}
-
-int write_pos(char ***map, char **trm, t_cord *cord, char set)
-{
-	int i;
-	int size;
-	int j;
-
-	j = 0;
-	size = 0;
-	while ((*map)[0][size] != '\0')
-		size++;
-	if (((*cord).x >= size || (*cord).y >= size) || ((*map)[(*cord).y][(*cord).y] != '.'))
-	{
-		return (0);
-	}
-	else if (trm[(*cord).y][(*cord).x] == '#')
-	{
-		(*map)[(*cord).y][(*cord).y] = set;
-		return (1);
-	}
-	return (1);
-}
-
-int check_put_tetrimo(char **map, t_tetris *trm, char set)
-{
-	int size;
-	t_cord cord;
-	int i;
-	int j;
-//вроде сделал
-	j = 0;
-	i = 0;
-	size = 0;
-	cord.x = 0;
-	cord.y = 0;
-	while (map[size + 1] != '\0')
-		size++;
-	if (trm->max_x > size || trm->max_y > size)
-		return (size + 1);
-	else
-	{
-		while (cord.y <= size)
-		{
-			if (!(write_pos(&map, trm->pos, &cord, set)))
-			{
-				del_all_pos(&map, set);
-				i = 0;
-			}
-			else
-			{
-				i++;
-				cord.x++;
-			}
-			if (cord.x == 4)
-			{
-				cord.x = 0;
-				cord.y++;
-			}
-		}
-		return (size + 1);
-	}
-}
-
-void erase_map(char **map)
-{
-	int i;
-
-	i = 0;
-	while (map[0] != '\0')
-	{
-		free(map[i]);
-		i++;
-	}
-	free(map[i]);
-	free(map);
-}
-
-int put_tetrimo(char **map, t_tetris *trm)
-{
-	int size;
-	int i;
-	char set;
-
-	set = 'A';
-	if ((size = check_put_tetrimo(map, trm, set)) != 0)
-	{
-		erase_map(map);
-		map = write_dots(create_map(size), size);
-		put_tetrimo(map, trm);
-	}
-	//write_tetrimo_in_map(map, trm, set);
-	if (trm->next != NULL)
-		put_tetrimo(map, trm->next);
-	return (1);
-}*/

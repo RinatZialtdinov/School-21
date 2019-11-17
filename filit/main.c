@@ -6,7 +6,7 @@
 /*   By: mgalt <mgalt@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 19:01:39 by mgalt             #+#    #+#             */
-/*   Updated: 2019/11/07 20:03:30 by mgalt            ###   ########.fr       */
+/*   Updated: 2019/11/17 19:16:46 by damerica         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 # include <stdio.h>
 #include "libft/libft.h"
 
-int		check2(char	*s)
+int			check2(char	*s)
 {
 	int		i;
-	int		n; //кол-во касаний
+	int		n;
 
 	i = 0;
 	n = 0;
@@ -39,23 +39,22 @@ int		check2(char	*s)
 			n++;
 		i++;
 	}
-	//printf("n in check2: %d\n", n);
 	if (n >= 6)
 		return (1);
 	return (0);
 }
 
-int     check1(char *s)
+int			check1(char *s)
 {
-    int     i;
-    int     n;
+	int		i;
+	int		n;
 
-    i = 0;
-    n = 0; // кол-во \n (должно быть 5)
-    while (s[i] != '\0' && (s[i] == '#' || s[i] == '.' || s[i] == '\n'))
-    {
-        if (s[i] == '\n' && (i - n) % 4 == 0)
-         	n++;
+	i = 0;
+	n = 0; 
+	while (s[i] != '\0' && (s[i] == '#' || s[i] == '.' || s[i] == '\n'))
+	{
+		if (s[i] == '\n' && (i - n) % 4 == 0)
+			n++;
 		i++;
 	}
 	if (n == 5 && i == 21)
@@ -63,7 +62,7 @@ int     check1(char *s)
 	return (0);
 }
 
-int improve_length(char *buf)
+int			improve_length(char *buf)
 {
 	int i;
 	int count;
@@ -92,11 +91,12 @@ int improve_length(char *buf)
 	return (result);
 }
 
-int improve_width(char *buf)
+int			improve_width(char *buf)
 {
 	int i;
 	int count;
 	int result;
+
 	result = 4;
 	count = 0;
 	i = 0;
@@ -105,14 +105,12 @@ int improve_width(char *buf)
 		while (i <= 19)
 		{
 			if (buf[i] == '.')
-			{
 				count++;
-			}
 			i = i + 5;
 		}
 		if (count == 4)
 		{
-			result --;
+			result--;
 		}
 		count = 0;
 		i = i - 19;
@@ -122,7 +120,7 @@ int improve_width(char *buf)
 	return (result + 1);
 }
 
-int dot(char *buf, int i1)
+int			dot(char *buf, int i1)
 {
 	int count;
 	int count1;
@@ -131,7 +129,7 @@ int dot(char *buf, int i1)
 	count = 0;
 	if (buf[i1] == '#')
 		return (1);
-	else 
+	else
 	{
 		if (i1 - 5 >= 0 && buf[i1 - 5] == '.')
 			count++;
@@ -414,6 +412,29 @@ int put_tetrimo(t_tetris *trm, char ***map, t_cord *coords, char set)
 	return (1);
 }
 
+void clean_trm(t_tetris **trm)
+{
+	t_tetris *k;
+	int i;
+	printf("%i\n", (*trm)->max_y);
+	while ((*trm))
+	{
+		i = 0;
+		printf("hey\n");
+		k = (*trm)->next;
+		while (i < (*trm)->max_y)
+		{
+			printf("ololo\n");
+			free((*trm)->pos[i]);
+			i++;
+		}
+		printf("eee\n");
+		free((*trm)->pos);
+		free(*trm);
+		*trm = k;
+	}
+}
+
 char **solution_map(t_tetris *trm)
 {
 	char **map;
@@ -429,10 +450,37 @@ char **solution_map(t_tetris *trm)
 		erase_map(&map);
 		map = write_dots(create_map(size), size);
 	}
+	clean_trm(&trm);
 	return (map);
 }
 
+void print_map(char **map)
+{
+	int i;
+	//printf("hey\n");
+	i = 0;
+	while (map[i][0] != '\0')
+	{
+		//printf("i = %i\n", i);
+		ft_putstr(map[i]);
+		ft_putchar('\n');
+		i++;
+	}
+}
 
+/*void clean_map(char **map)
+{
+	int i;
+	//printf("hey\n");
+	i = 0;
+	while (map[i][0] != '\0')
+	{
+		printf("i = %i\n", i);
+		free(map[i]);
+		i++;
+	}
+	free(map);
+}*/
 
 int     main(int ac, char **av)
 {
@@ -473,6 +521,7 @@ int     main(int ac, char **av)
 			create_list(buf, &trm);
 		}
 		trm = trm->head;
+		//int a = scanf("%i", &a);
 		if (c > 26)
 		{
 			ft_putstr("error\n");
@@ -480,13 +529,16 @@ int     main(int ac, char **av)
 		}
     }
     map = solution_map(trm);
-	printf("^%s\n", map[0]);
-	printf("^%s\n", map[1]);
-	printf("^%s\n", map[2]);
-	printf("^%s\n", map[3]);
-	printf("^%s\n", map[4]);
-	printf("^%s\n", map[5]);
+	print_map(map);
+	erase_map(&map);
+	//printf("^%s\n", map[0]);
+	//printf("^%s\n", map[1]);
+	//printf("^%s\n", map[2]);
+	//printf("^%s\n", map[3]);
+	//printf("^%s\n", map[4]);
+	//printf("^%s\n", map[5]);
 	//printf("^%s\n", map[6]);
+	int a = scanf("%i", &a);
 	return (0);
 }
 
